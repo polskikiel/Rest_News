@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface RestServices {
     News getArticlesFromCompany(String company);
+
+    String getLanguageToArticle(String text);
 }
