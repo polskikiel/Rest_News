@@ -21,31 +21,15 @@ public class AsyncServicesImpl implements AsyncServices {
     @Async
     public void getArticles() {
         List<News> news = new ArrayList<>();
-
         companyList.getCompanies().forEach(
                 s -> {
-                    news.add(restServices.getArticlesFromCompany(s));
+                    News n = restServices.getArticlesFromCompany(s);
+                    news.add(n);
                 });
-
         newsServices.saveNews(news);
+        System.out.println("getArticles refreshed");
     }
 
-    @Async
-    public void getLanguageLabelsForArticles() {
-
-        System.out.println("LANG");
-
-        List<News> allNews = newsServices.getAllNews();
-        allNews.forEach(news -> {
-            news.getArticles().stream().filter(article ->
-                article.getLanguage().isEmpty() || article.getLanguage() == null
-            ).forEach(article -> {
-                article.setLanguage(restServices.getLanguageToArticle(article.getTitle()));
-            });
-        });
-
-        newsServices.saveNews(allNews);
-    }
 
 
 }

@@ -2,7 +2,9 @@ package com.newssheet.restthebest.model;
 
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.List;
 
 @Entity
@@ -13,9 +15,10 @@ import java.util.List;
 @AllArgsConstructor
 public class News {
     @Id
-    @GeneratedValue
-    Long id;
     String company;
+    String name;
+    int likes;
+    String language;
 
     @OneToMany(mappedBy = "news")
     List<Article> articles;

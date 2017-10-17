@@ -1,36 +1,59 @@
 package com.newssheet.restthebest.controller;
 
-import com.newssheet.restthebest.dto.NewsDto;
+import com.newssheet.restthebest.dto.CompaniesDto;
+import com.newssheet.restthebest.model.Article;
 import com.newssheet.restthebest.model.News;
-import com.newssheet.restthebest.services.RestServices;
-import com.newssheet.restthebest.services.RestServicesImpl;
+import com.newssheet.restthebest.services.NewsServicesImpl;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
 public class Controller {
-    RestServicesImpl restServices;
+    NewsServicesImpl newsServices;
 
     @GetMapping("/")
     public String getSite() {
         return "main";
     }
 
-    @GetMapping("/{company}")
-    public News getNewsFromCompany(@PathVariable("company") String company) {
-        return restServices.getArticlesFromCompany(company);
+    @GetMapping("/company/{company}")
+    public News getNewsFromCompany(@PathVariable("company") final String company) {
+        return newsServices.getCompanyWithArticles(company);
+    }
+    @GetMapping("/company/{company}/article")
+    public List<Article> getArticlesFromCompany(@PathVariable("company") final String company) {
+        return newsServices.getCompanyWithArticles(company).getArticles();
     }
 
-    @GetMapping("/{company}/{id}")
-    public NewsDto getNewsFromCompanyId(@PathVariable("company") String company,
-                                        @PathVariable("id") Integer id) {
-        return null;
+    @GetMapping("/company/{company}/article/{id}")
+    public Article getNewsFromCompanyId(@PathVariable("company") final String company,
+                                        @PathVariable("id") final Integer id) {
+        return newsServices.getCompanyWithArticles(company).getArticles().get(id);
     }
+
+    @GetMapping("/author/{author}")
+    public List<Article> getNewsFromAuthor(@PathVariable("author") final String author) {
+        return newsServices.getArticlesFromAuthor(author);
+    }
+
+    @GetMapping("/articles")
+    public List<News> getAllArticles() {
+        return newsServices.getAllNews();
+    }
+
+    @GetMapping("/articles/top")
+    public List<Article> bestArticles() {
+        return newsServices.getTop30Articles();
+    }
+
+    @GetMapping("/company")
+    public List<CompaniesDto> getAllCompanies() {
+        return newsServices.getAllCompanies();
+    }
+
 }

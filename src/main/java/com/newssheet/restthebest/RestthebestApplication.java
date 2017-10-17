@@ -19,15 +19,8 @@ public class RestthebestApplication implements CommandLineRunner{
 	public void run(String... args) throws Exception {
 		while (true) {
 			asyncServices.getArticles();
-
 			try {
-				Thread.sleep(100);
-			} catch (InterruptedException ie) {
-				return;
-			}
-			asyncServices.getLanguageLabelsForArticles();
-			try {
-				Thread.sleep(100000);
+				Thread.sleep(1000000);	//~15min
 			} catch (InterruptedException ie) {
 				return;
 			}
