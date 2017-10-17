@@ -1,6 +1,6 @@
 package com.newssheet.restthebest.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,16 +12,14 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Article implements Serializable {
     @Id
     @GeneratedValue
-    @JsonIgnore
     Long id;
 
-    @JsonIgnore
     int likes;
 
-    @JsonIgnore
     @ManyToOne
     News news;
 

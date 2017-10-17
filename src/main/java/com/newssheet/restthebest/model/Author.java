@@ -1,31 +1,27 @@
 package com.newssheet.restthebest.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.List;
 
 @Entity
+@AllArgsConstructor
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class News {
+public class Author {
     @Id
-    String company;
     String name;
+    String company;
     int likes;
-    String language;
-    String category;
+    int articlesNr;
 
-    @Column(length = 1000)
-    String description;
-
-    @OneToMany(mappedBy = "news")
+    @OneToMany
     List<Article> articles;
-
 }
