@@ -1,4 +1,4 @@
-package com.newssheet.restthebest.services;
+package com.newssheet.restthebest.services.io;
 
 import com.newssheet.restthebest.model.News;
 

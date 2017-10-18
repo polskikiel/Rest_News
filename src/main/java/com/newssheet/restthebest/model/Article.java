@@ -17,7 +17,6 @@ public class Article implements Serializable {
     @Id
     @GeneratedValue
     Long id;
-
     int likes;
 
     @ManyToOne

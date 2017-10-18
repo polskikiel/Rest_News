@@ -14,4 +14,5 @@ public class CompaniesDto {
     String name;
     int likes;
     String language;
+    String category;
 }

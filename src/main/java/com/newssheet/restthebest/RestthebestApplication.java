@@ -1,6 +1,6 @@
 package com.newssheet.restthebest;
 
-import com.newssheet.restthebest.services.AsyncServices;
+import com.newssheet.restthebest.services.io.AsyncServices;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

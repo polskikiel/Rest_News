@@ -2,42 +2,31 @@ package com.newssheet.restthebest.services;
 
 import com.newssheet.restthebest.dto.CompaniesDto;
 import com.newssheet.restthebest.model.Article;
-import com.newssheet.restthebest.model.Author;
 import com.newssheet.restthebest.model.News;
 import com.newssheet.restthebest.repo.ArticleRepo;
-import com.newssheet.restthebest.repo.AuthorRepo;
 import com.newssheet.restthebest.repo.NewsRepo;
+import com.newssheet.restthebest.services.io.NewsServices;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class NewsServicesImpl implements NewsServices {
     private NewsRepo newsRepo;
     private ArticleRepo articleRepo;
-    private AuthorRepo authorRepo;
 
     public void saveNews(@NonNull News news) {
         newsRepo.save(news);
     }
-    public void saveNews(@NonNull List<News> news) {
-        newsRepo.save(news);
-        news.forEach(news1 -> {
-            news1.getArticles().forEach(article -> article.setNews(news1));
-            articleRepo.save(news1.getArticles());
-        });
-        newsRepo.save(news);
-    }
 
-    public void saveAuthor(Author author) {
-        authorRepo.save(author);
-    }
-    public void saveAuthor(List<Author> author) {
-        authorRepo.save(author);
+    public void saveNews(@NonNull final List<News> news) {
+        newsRepo.save(news);
     }
 
     public News getCompanyWithArticles(String company) {
@@ -57,23 +46,23 @@ public class NewsServicesImpl implements NewsServices {
     }
 
     public List<News> getAllNews() {
-        return (List<News>)newsRepo.findAll();
+        return (List<News>) newsRepo.findAll();
     }
 
     public List<CompaniesDto> getAllCompanies() {
         List<CompaniesDto> companiesDto = new ArrayList<>();
         this.getAllNews().forEach(news -> companiesDto.add(
-                new CompaniesDto(news.getCompany(), news.getName(), news.getLikes(), news.getLanguage())));
+                new CompaniesDto(news.getCompany(), news.getName(), news.getLikes(), news.getLanguage(), news.getCategory())));
         return companiesDto;
     }
 
-    public List<Author> getAllAuthors() {
-        return (List<Author>)authorRepo.findAll();
+    public List<News> getNewsByCategories(String[] categories, List<News> n) {
+        return n.stream().
+                filter(news -> Arrays.asList(categories).contains(news.getCategory())).
+                collect(Collectors.toList());
     }
 
-    public Author getAuthorByName(String name) {
-        return authorRepo.findOne(name);
+    public List<News> getNewsByLanguage(String language) {
+        return newsRepo.getAllByLanguage(language);
     }
-
-
 }
