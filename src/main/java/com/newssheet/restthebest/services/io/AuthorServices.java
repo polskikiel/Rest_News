@@ -18,4 +18,5 @@ public interface AuthorServices {
 
     void createAuthor(String name, News news);
 
+    void addArticle(String name);
 }

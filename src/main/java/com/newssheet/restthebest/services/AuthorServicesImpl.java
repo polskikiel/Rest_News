@@ -47,4 +47,11 @@ public class AuthorServicesImpl implements AuthorServices {
     public void createAuthor(String name, News news) {
         this.saveAuthor(Author.builder().name(name).news(news).articlesNr(1).build());
     }
+
+    @Override
+    public void addArticle(String name) {
+        Author author = this.getByName(name);
+        author.setArticlesNr(author.getArticlesNr() + 1);
+        this.saveAuthor(author);
+    }
 }

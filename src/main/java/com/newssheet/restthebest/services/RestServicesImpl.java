@@ -24,6 +24,7 @@ public class RestServicesImpl implements RestServices {
     Sources sources;
     AuthorServices authorServices;
     ArticleRepo articleRepo;
+    NewsServicesImpl newsServices;
 
     @Getter
     private final String newsApiKey = "325f88816211470b89e1c5e430fa45d6";
@@ -47,6 +48,7 @@ public class RestServicesImpl implements RestServices {
 
 
 
+            newsServices.saveNews(n);
             n.getArticles().
                     forEach(article -> {
                         if (this.isHaveBadChars(article.getDescription())) {
@@ -58,9 +60,11 @@ public class RestServicesImpl implements RestServices {
 
                         article.setNews(n);
 
-                        if (article.getAuthor() != null) {
+                        if (article.getAuthor() != null) {            // CREATE ANONYMOUS WITH THIS COMPANY ( LONG ID )
                             if (!authorServices.isThisAuthorExist(article.getAuthor())) {
                                 authorServices.createAuthor(article.getAuthor(), n);
+                            } else {
+                                authorServices.addArticle(article.getAuthor());
                             }
                         }
 
