@@ -19,18 +19,17 @@ public class Article implements Serializable {
     Long id;
     int likes;
 
-    @ManyToOne
-    News news;
-
 
     @Column(length = 1000)
     String author;
+
+    @ManyToOne
+    News news;
+
     @Column(length = 1000)
     String title;
-
     @Column(length = 10001)
     String description;
-
     @Column(length = 1000)
     String url;
     @Column(length = 1000)

@@ -4,8 +4,7 @@ import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.List;
+import javax.persistence.ManyToOne;
 
 @Entity
 @AllArgsConstructor
@@ -16,10 +15,12 @@ import java.util.List;
 public class Author {
     @Id
     String name;
-    String company;
+
+    @ManyToOne
+    News news;
+
     int likes;
     int articlesNr;
 
-    @OneToMany
-    List<Article> articles;
+
 }

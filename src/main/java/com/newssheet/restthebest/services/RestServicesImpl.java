@@ -7,6 +7,7 @@ import com.newssheet.restthebest.services.io.AuthorServices;
 import com.newssheet.restthebest.services.io.RestServices;
 import com.newssheet.restthebest.util.Sources;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ public class RestServicesImpl implements RestServices {
     AuthorServices authorServices;
     ArticleRepo articleRepo;
 
+    @Getter
     private final String newsApiKey = "325f88816211470b89e1c5e430fa45d6";
 
     public List<News> getArticles() {
@@ -43,7 +45,7 @@ public class RestServicesImpl implements RestServices {
             n.setName(sourceDto.getName());
             n.setDescription(sourceDto.getDescription());
 
-            newsList.add(n);
+
 
             n.getArticles().
                     forEach(article -> {
@@ -53,16 +55,19 @@ public class RestServicesImpl implements RestServices {
                         if (this.isHaveBadChars(article.getTitle())) {
                             article.setTitle(this.removeBadChars(article.getTitle()));
                         }
+
                         article.setNews(n);
-                        articleRepo.save(article);
 
                         if (article.getAuthor() != null) {
                             if (!authorServices.isThisAuthorExist(article.getAuthor())) {
-                                authorServices.createAuthor(article.getAuthor(), n.getCompany());
+                                authorServices.createAuthor(article.getAuthor(), n);
                             }
-                            authorServices.addArticleToAuthor(article.getAuthor(), article);
                         }
+
+                        articleRepo.save(article);
                     });
+
+            newsList.add(n);
 
         });
         return newsList;
