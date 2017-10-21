@@ -28,7 +28,7 @@ public class Article implements Serializable {
 
     @Column(length = 1000)
     String title;
-    @Column(length = 10001)
+    @Column(length = 100001)
     String description;
     @Column(length = 1000)
     String url;

@@ -1,6 +1,8 @@
 package com.newssheet.restthebest.services;
 
+import com.newssheet.restthebest.dto.ArticleDto;
 import com.newssheet.restthebest.dto.CompaniesDto;
+import com.newssheet.restthebest.dto.NewsDto;
 import com.newssheet.restthebest.model.Article;
 import com.newssheet.restthebest.model.News;
 import com.newssheet.restthebest.repo.ArticleRepo;
@@ -27,6 +29,13 @@ public class NewsServicesImpl implements NewsServices {
 
     public void saveNews(@NonNull final List<News> news) {
         newsRepo.save(news);
+    }
+
+    public boolean isThisArticleExist(Article article) {
+        if (articleRepo.findByTitle(article.getTitle()) != null) {
+            return true;
+        }
+        return false;
     }
 
     public News getCompanyWithArticles(String company) {
@@ -62,7 +71,29 @@ public class NewsServicesImpl implements NewsServices {
                 collect(Collectors.toList());
     }
 
-    public List<News> getNewsByLanguage(String language) {
-        return newsRepo.getAllByLanguage(language);
+    public ArticleDto jsonArticles(Article article) {
+        return ArticleDto.builder().author(article.getAuthor()).company(article.getNews().getCompany()).
+                description(article.getDescription()).likes(article.getLikes()).publishedAt(article.getPublishedAt()).
+                title(article.getTitle()).url(article.getUrl()).urlToImage(article.getUrlToImage()).build();
+    }
+    public List<ArticleDto> jsonArticles(List<Article> articles) {
+        List<ArticleDto> articleDtos = new ArrayList<>();
+        articles.stream().
+                forEach(article -> articleDtos.add(jsonArticles(article)));
+
+        return articleDtos;
+    }
+
+    public NewsDto jsonNews(News news) {
+        return NewsDto.builder().articles(jsonArticles(news.getArticles())).category(news.getCategory()).company(news.getCompany()).
+                description(news.getDescription()).language(news.getLanguage()).name(news.getName()).build();
+    }
+
+    public List<NewsDto> jsonNews(List<News> news) {
+        List<NewsDto> newsDtos = new ArrayList<>();
+        news.stream().
+                forEach(news1 -> newsDtos.add(jsonNews(news1)));
+
+        return newsDtos;
     }
 }

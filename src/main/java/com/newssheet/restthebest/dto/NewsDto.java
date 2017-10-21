@@ -6,17 +6,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
-
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
-public class AuthorDto {
-    String name;
+public class NewsDto {
     String company;
+    String name;
     int likes;
-    int articlesNr;
+    String language;
+    String category;
+
+    String description;
 
     List<ArticleDto> articles;
-
 }

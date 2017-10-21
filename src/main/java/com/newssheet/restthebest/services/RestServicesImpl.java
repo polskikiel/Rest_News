@@ -47,7 +47,6 @@ public class RestServicesImpl implements RestServices {
             n.setDescription(sourceDto.getDescription());
 
 
-
             newsServices.saveNews(n);
             n.getArticles().
                     forEach(article -> {
@@ -58,17 +57,17 @@ public class RestServicesImpl implements RestServices {
                             article.setTitle(this.removeBadChars(article.getTitle()));
                         }
 
-                        article.setNews(n);
-
-                        if (article.getAuthor() != null) {            // CREATE ANONYMOUS WITH THIS COMPANY ( LONG ID )
-                            if (!authorServices.isThisAuthorExist(article.getAuthor())) {
-                                authorServices.createAuthor(article.getAuthor(), n);
-                            } else {
-                                authorServices.addArticle(article.getAuthor());
+                        if (!newsServices.isThisArticleExist(article)) {
+                            article.setNews(n);
+                            if (article.getAuthor() != null && !article.getAuthor().isEmpty()) {            // CREATE ANONYMOUS WITH THIS COMPANY ( LONG ID )
+                                if (!authorServices.isThisAuthorExist(article.getAuthor())) {
+                                    authorServices.createAuthor(article.getAuthor(), n);
+                                } else {
+                                    authorServices.addArticle(article.getAuthor(), article.getId());
+                                }
                             }
+                            articleRepo.save(article);
                         }
-
-                        articleRepo.save(article);
                     });
 
             newsList.add(n);

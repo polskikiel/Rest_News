@@ -1,8 +1,10 @@
 package com.newssheet.restthebest.controller;
 
+import com.newssheet.restthebest.dto.ArticleDto;
+import com.newssheet.restthebest.dto.AuthorDto;
 import com.newssheet.restthebest.dto.CompaniesDto;
-import com.newssheet.restthebest.model.Article;
-import com.newssheet.restthebest.model.News;
+import com.newssheet.restthebest.dto.NewsDto;
+import com.newssheet.restthebest.services.AuthorServicesImpl;
 import com.newssheet.restthebest.services.NewsServicesImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,31 +18,42 @@ import java.util.List;
 @AllArgsConstructor
 public class Controller {
     NewsServicesImpl newsServices;
+    AuthorServicesImpl authorServices;
 
     @GetMapping("/company/{company}")
-    public News getNewsFromCompany(@PathVariable("company") final String company) {
-        return newsServices.getCompanyWithArticles(company);
-    }
-
-    @GetMapping("/company/{company}/article")
-    public List<Article> getArticlesFromCompany(@PathVariable("company") final String company) {
-        return newsServices.getCompanyWithArticles(company).getArticles();
+    public NewsDto getNewsFromCompany(@PathVariable("company") final String company) {
+        return newsServices.jsonNews(newsServices.getCompanyWithArticles(company));
     }
 
     @GetMapping("/company/{company}/article/{id}")
-    public Article getNewsFromCompanyId(@PathVariable("company") final String company,
+    public ArticleDto getNewsFromCompanyId(@PathVariable("company") final String company,
                                         @PathVariable("id") final Integer id) {
-        return newsServices.getCompanyWithArticles(company).getArticles().get(id);
+        return newsServices.jsonArticles(newsServices.getCompanyWithArticles(company).getArticles().get(id));
     }
 
     @GetMapping("/author/{author}")
-    public List<Article> getNewsFromAuthor(@PathVariable("author") final String author) {
-        return newsServices.getArticlesFromAuthor(author);
+    public AuthorDto getNewsFromAuthor(@PathVariable("author") final String name) {
+        return authorServices.getAuthor(name);
+    }
+
+    @GetMapping("/authors/top")
+    public List<AuthorDto> getTopAuthors(@RequestParam("by") String by) {
+        if (by.equals("likes")) {
+            return authorServices.jsonAuthors(authorServices.topAuthors());
+        } else if (by.equals("art")) {
+            return authorServices.jsonAuthors(authorServices.authorsWithMostArticles());
+        }
+        return null;
+    }
+
+    @GetMapping("/company/{company}/authors")
+    public List<AuthorDto> getAuthorsFromCompany(@PathVariable("company") final String company) {
+        return authorServices.getAuthors(company);
     }
 
     @GetMapping("/articles/top")
-    public List<Article> bestArticles() {
-        return newsServices.getTop30Articles();
+    public List<ArticleDto> bestArticles() {
+        return newsServices.jsonArticles(newsServices.getTop30Articles());
     }
 
     @GetMapping("/company")
@@ -49,14 +62,14 @@ public class Controller {
     }
 
     @GetMapping("/news")
-    public List<News> getNewsByLanguageOrCategory(@RequestParam(value = "lang", required = false) final String lang,
+    public List<NewsDto> getNewsByLanguageOrCategory(@RequestParam(value = "lang", required = false) final String lang,
                                                   @RequestParam(value = "cat", required = false) final String[] cat) {
         if (lang != null && cat != null) {
-            return newsServices.getNewsByCategories(cat, newsServices.getArticlesByLanguage(lang));
+            return newsServices.jsonNews(newsServices.getNewsByCategories(cat, newsServices.getArticlesByLanguage(lang)));
         } else if (lang == null) {
-            return newsServices.getNewsByCategories(cat, newsServices.getAllNews());
+            return newsServices.jsonNews(newsServices.getNewsByCategories(cat, newsServices.getAllNews()));
         } else if (cat == null) {
-            return newsServices.getArticlesByLanguage(lang);
+            return newsServices.jsonNews(newsServices.getArticlesByLanguage(lang));
         }
         return null;        // we can make return newsServices.getAll(), but it would crash server really easy
     }

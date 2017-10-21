@@ -1,6 +1,7 @@
 package com.newssheet.restthebest.repo;
 
 import com.newssheet.restthebest.model.Article;
+import com.newssheet.restthebest.model.News;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +12,8 @@ public interface ArticleRepo extends CrudRepository<Article, Long> {
     List<Article> getAllByAuthor(String author);
 
     List<Article> getTop30ByOrderByLikesDesc();
+
+    Article findByTitle(String title);
+
+    List<Article> findAllByNews(News news);
 }

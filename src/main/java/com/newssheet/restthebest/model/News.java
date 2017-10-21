@@ -22,7 +22,7 @@ public class News {
     String language;
     String category;
 
-    @Column(length = 10001)
+    @Column(length = 100001)
     String description;
 
     @OneToMany(mappedBy = "news")

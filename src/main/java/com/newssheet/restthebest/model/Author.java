@@ -2,6 +2,7 @@ package com.newssheet.restthebest.model;
 
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -14,6 +15,7 @@ import javax.persistence.ManyToOne;
 @Builder
 public class Author {
     @Id
+    @Column(length = 1000)
     String name;
 
     @ManyToOne

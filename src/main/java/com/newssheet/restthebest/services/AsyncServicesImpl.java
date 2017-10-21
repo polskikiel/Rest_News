@@ -19,14 +19,10 @@ public class AsyncServicesImpl implements AsyncServices {
 
     @Async
     public void getArticles() throws GenericJDBCException {
-        try {
-            newsServices.saveNews(restServices.getArticles());
-        } catch (GenericJDBCException gen) {
-            throw new GenericJDBCException("Bad signs in description or title", gen.getSQLException());
-        }
+        newsServices.saveNews(restServices.getArticles());
+
         System.out.println("getArticles refreshed at - " + Calendar.getInstance().getTime().toString());
     }
-
 
 
 }

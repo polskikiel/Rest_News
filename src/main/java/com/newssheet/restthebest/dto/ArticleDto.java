@@ -5,18 +5,19 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
-public class AuthorDto {
-    String name;
-    String company;
+public class ArticleDto {
     int likes;
-    int articlesNr;
 
-    List<ArticleDto> articles;
+    String author;
+    String company;
 
+    String title;
+    String description;
+    String url;
+    String urlToImage;
+    String publishedAt;
 }
