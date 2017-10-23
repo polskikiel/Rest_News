@@ -1,16 +1,15 @@
 package com.newssheet.restthebest.services;
 
 
+import com.newssheet.restthebest.dto.ImgDto;
 import com.newssheet.restthebest.model.News;
 import com.newssheet.restthebest.repo.ArticleRepo;
 import com.newssheet.restthebest.services.io.AuthorServices;
 import com.newssheet.restthebest.services.io.RestServices;
 import com.newssheet.restthebest.util.Sources;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,7 +25,6 @@ public class RestServicesImpl implements RestServices {
     ArticleRepo articleRepo;
     NewsServicesImpl newsServices;
 
-    @Getter
     private final String newsApiKey = "325f88816211470b89e1c5e430fa45d6";
 
     public List<News> getArticles() {
@@ -35,10 +33,15 @@ public class RestServicesImpl implements RestServices {
 
             String url = "https://newsapi.org/v1/articles?apiKey=" + newsApiKey + "&source=" + sourceDto.getId();
 
-            ResponseEntity<News> news =
-                    restTemplate.exchange(url, HttpMethod.GET, HttpEntity.EMPTY, News.class);
+            News n = restTemplate.
+                    exchange(url, HttpMethod.GET, HttpEntity.EMPTY, News.class).getBody();
 
-            News n = news.getBody();
+            if (sources.isHaveChanged()) {
+                ImgDto imgDto = restTemplate.exchange("https://api.qwant.com/api/search/images?count=3&offset=1&q=" + sourceDto.getName(),
+                        HttpMethod.GET, HttpEntity.EMPTY, ImgDto.class).getBody();
+                System.out.println("have");
+                n.setImg(imgDto.getData().getResult().getItems()[0].getMedia());
+            }
 
             n.setCompany(sourceDto.getId());
             n.setCategory(sourceDto.getCategory());
@@ -75,6 +78,7 @@ public class RestServicesImpl implements RestServices {
         });
         return newsList;
     }
+
 
     private String removeBadChars(final String s) {
         if (s == null) {

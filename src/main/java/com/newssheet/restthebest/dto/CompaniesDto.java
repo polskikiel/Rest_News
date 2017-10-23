@@ -15,4 +15,5 @@ public class CompaniesDto {
     int likes;
     String language;
     String category;
+    String imgUrl;
 }

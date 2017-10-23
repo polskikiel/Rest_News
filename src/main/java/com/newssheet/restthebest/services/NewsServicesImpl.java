@@ -61,7 +61,7 @@ public class NewsServicesImpl implements NewsServices {
     public List<CompaniesDto> getAllCompanies() {
         List<CompaniesDto> companiesDto = new ArrayList<>();
         this.getAllNews().forEach(news -> companiesDto.add(
-                new CompaniesDto(news.getCompany(), news.getName(), news.getLikes(), news.getLanguage(), news.getCategory())));
+                new CompaniesDto(news.getCompany(), news.getName(), news.getLikes(), news.getLanguage(), news.getCategory(), news.getImg())));
         return companiesDto;
     }
 
