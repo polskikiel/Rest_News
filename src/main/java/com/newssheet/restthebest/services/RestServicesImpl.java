@@ -8,6 +8,7 @@ import com.newssheet.restthebest.services.io.AuthorServices;
 import com.newssheet.restthebest.services.io.RestServices;
 import com.newssheet.restthebest.util.Sources;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class RestServicesImpl implements RestServices {
     ArticleRepo articleRepo;
     NewsServicesImpl newsServices;
 
+    @Getter
     private final String newsApiKey = "325f88816211470b89e1c5e430fa45d6";
 
     public List<News> getArticles() {

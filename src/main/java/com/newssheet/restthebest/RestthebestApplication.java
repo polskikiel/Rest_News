@@ -20,7 +20,7 @@ public class RestthebestApplication implements CommandLineRunner{
 		while (true) {
 			asyncServices.getArticles();
 			try {
-				Thread.sleep(1000000);	//~15min
+				Thread.sleep(10000);	//~15min
 			} catch (InterruptedException ie) {
 				return;
 			}

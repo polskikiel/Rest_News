@@ -1,5 +1,6 @@
 package com.newssheet.restthebest.services;
 
+import com.newssheet.restthebest.dto.ImgDto;
 import com.newssheet.restthebest.dto.SourceResponseDto;
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,6 +34,13 @@ public class RestServicesImplTest {
                 HttpMethod.GET, HttpEntity.EMPTY, SourceResponseDto.class);
         Assert.assertTrue(sources.getStatusCode().is2xxSuccessful());
         Assert.assertTrue("STATUS NOT OK[200]", sources.getStatusCode().equals(HttpStatus.OK));
+    }
+
+    @Test
+    public void testImages() {
+        ResponseEntity<ImgDto> images = restTemplate.getForEntity("https://api.qwant.com/api/search/images?count=3&offset=1&q=img", ImgDto.class);
+        Assert.assertTrue(images.getStatusCode().is2xxSuccessful());
+        Assert.assertTrue(images.getStatusCode().equals(HttpStatus.OK));
     }
 
     @Test
