@@ -29,6 +29,7 @@ public class RestServicesImpl implements RestServices {
     @Getter
     private final String newsApiKey = "325f88816211470b89e1c5e430fa45d6";
 
+    @Override
     public List<News> getArticles() {
         List<News> newsList = new ArrayList<>();
         sources.build().getSources().forEach(sourceDto -> {
@@ -39,10 +40,13 @@ public class RestServicesImpl implements RestServices {
                     exchange(url, HttpMethod.GET, HttpEntity.EMPTY, News.class).getBody();
 
             if (sources.isHaveChanged()) {
-                ImgDto imgDto = restTemplate.exchange("https://api.qwant.com/api/search/images?count=3&offset=1&q=" + sourceDto.getName(),
-                        HttpMethod.GET, HttpEntity.EMPTY, ImgDto.class).getBody();
-                System.out.println("have");
-                n.setImg(imgDto.getData().getResult().getItems()[0].getMedia());
+                try {
+                    n.setImg(this.getImg(sourceDto.getId()));       //  Qwant img api
+                } catch (Exception e) {
+                    n.setImg(newsServices.getCompanyWithArticles(sourceDto.getId()).getImg());
+                }
+            } else {
+                n.setImg(newsServices.getCompanyWithArticles(sourceDto.getId()).getImg());
             }
 
             n.setCompany(sourceDto.getId());
@@ -51,8 +55,9 @@ public class RestServicesImpl implements RestServices {
             n.setName(sourceDto.getName());
             n.setDescription(sourceDto.getDescription());
 
-
             newsServices.saveNews(n);
+
+
             n.getArticles().
                     forEach(article -> {
                         if (this.isHaveBadChars(article.getDescription())) {
@@ -79,6 +84,16 @@ public class RestServicesImpl implements RestServices {
 
         });
         return newsList;
+    }
+
+
+    private String getImg(String company) throws Exception {
+        try {
+            return restTemplate.exchange("https://api.qwant.com/api/search/images?count=3&offset=1&q=" + company,
+                    HttpMethod.GET, HttpEntity.EMPTY, ImgDto.class).getBody().getData().getResult().getItems()[0].getMedia();
+        } catch (Exception e) {
+            throw new RuntimeException("VISIT QWANT.COM AND SOLVE CAPTCHA");
+        }
     }
 
 

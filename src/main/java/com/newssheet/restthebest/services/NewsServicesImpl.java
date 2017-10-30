@@ -86,7 +86,7 @@ public class NewsServicesImpl implements NewsServices {
 
     public NewsDto jsonNews(News news) {
         return NewsDto.builder().articles(jsonArticles(news.getArticles())).category(news.getCategory()).company(news.getCompany()).
-                description(news.getDescription()).language(news.getLanguage()).name(news.getName()).build();
+                description(news.getDescription()).language(news.getLanguage()).name(news.getName()).img(news.getImg()).build();
     }
 
     public List<NewsDto> jsonNews(List<News> news) {

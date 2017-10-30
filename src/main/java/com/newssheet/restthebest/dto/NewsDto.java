@@ -19,5 +19,7 @@ public class NewsDto {
 
     String description;
 
+    String img;
+
     List<ArticleDto> articles;
 }

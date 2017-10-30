@@ -24,7 +24,9 @@ public class Sources {
 
 
         if (sources != null &&
-                sources.getSources().size() == sourceResponseDto.getSources().size()) {  // not a best way to check if we get same companies but containAll() is not working
+                sources.getSources().size() == sourceResponseDto.getSources().size()) {
+            // not a best way to check if we get same companies but containAll() method is not working for me
+
             haveChanged = false;
             return sources;
         } else {

@@ -3,12 +3,8 @@ package com.newssheet.restthebest.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
-@Getter
-@Setter
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ImgDto {
@@ -16,22 +12,16 @@ public class ImgDto {
     String status;
 
     @lombok.Data
-    @Getter
-    @Setter
     @AllArgsConstructor
     public static class Data {
         Result result;
 
         @lombok.Data
-        @Getter
-        @Setter
         @AllArgsConstructor
         public static class Result {
             Items[] items;
 
-            @lombok.Data
-            @Getter
-            @Setter
+            @lombok.Data            //@Data contains whole set of utilities for typical POJO objects
             @AllArgsConstructor
             public static class Items {
                 String media;
