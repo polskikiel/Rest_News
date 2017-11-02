@@ -16,9 +16,7 @@ public class NewsDto {
     int likes;
     String language;
     String category;
-
     String description;
-
     String img;
 
     List<ArticleDto> articles;

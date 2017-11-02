@@ -27,6 +27,8 @@ public class ImgDto {
                 String media;
                 String url;
                 String media_fullsize;
+                Integer width;
+                Integer height;
             }
     }
 

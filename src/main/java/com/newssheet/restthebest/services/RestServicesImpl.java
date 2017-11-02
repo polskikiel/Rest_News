@@ -15,7 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -39,7 +41,7 @@ public class RestServicesImpl implements RestServices {
             News n = restTemplate.
                     exchange(url, HttpMethod.GET, HttpEntity.EMPTY, News.class).getBody();
 
-            if (sources.isHaveChanged()) {
+            if (sources.isHaveChanged()) {              // dont want to update images all the time
                 try {
                     n.setImg(this.getImg(sourceDto.getId()));       //  Qwant img api
                 } catch (Exception e) {
@@ -87,10 +89,19 @@ public class RestServicesImpl implements RestServices {
     }
 
 
-    private String getImg(String company) throws Exception {
+    private String getImg(final String company) throws Exception {
         try {
-            return restTemplate.exchange("https://api.qwant.com/api/search/images?count=3&offset=1&q=" + company,
-                    HttpMethod.GET, HttpEntity.EMPTY, ImgDto.class).getBody().getData().getResult().getItems()[0].getMedia();
+            Optional<ImgDto.Data.Result.Items> imgDto = Arrays.asList(restTemplate.exchange("https://api.qwant.com/api/search/images?count=5&offset=1&q=" + company,
+                    HttpMethod.GET, HttpEntity.EMPTY, ImgDto.class).getBody().getData().getResult().getItems()).stream().filter(
+                    items -> items.getHeight() > 200 && items.getWidth() > 200      // choose only bigger photos then 200x200
+            ).findFirst();
+
+            if (imgDto.isPresent()) {
+                return imgDto.get().getMedia();
+            } else {
+                return "http://livesmartly.co/wp-content/uploads/2017/09/news-3.jpg";
+            }
+
         } catch (Exception e) {
             throw new RuntimeException("VISIT QWANT.COM AND SOLVE CAPTCHA");
         }

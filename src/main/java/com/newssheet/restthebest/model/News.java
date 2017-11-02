@@ -28,6 +28,7 @@ public class News {
     @OneToMany(mappedBy = "news")
     List<Article> articles;
 
+    @Column(length = 1000)
     String img;
 
 }
